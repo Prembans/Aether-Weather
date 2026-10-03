@@ -41,14 +41,20 @@ export function renderCurrentWeather(
   let highlightBadge = '';
   if (current.weather_code >= 95) {
     highlightBadge = `<div class="weather-alert-badge alert-storm"><span class="badge-dot"></span> Thunderstorm Warning</div>`;
-  } else if (current.weather_code >= 61 && current.weather_code <= 82) {
+  } else if ((current.weather_code >= 51 && current.weather_code <= 82) || (current.precipitation && current.precipitation > 0)) {
     highlightBadge = `<div class="weather-alert-badge alert-rain"><span class="badge-dot"></span> Active Precipitation</div>`;
-  } else if (daily.uv_index_max && daily.uv_index_max[0] >= 7) {
+  } else if (current.weather_code === 10 || current.weather_code === 45 || current.weather_code === 48) {
+    highlightBadge = `<div class="weather-alert-badge alert-fog"><span class="badge-dot"></span> Mist / Low Visibility</div>`;
+  } else if (current.weather_code === 3 || (current.cloud_cover && current.cloud_cover >= 80)) {
+    highlightBadge = `<div class="weather-alert-badge alert-cloud"><span class="badge-dot"></span> Overcast Skies</div>`;
+  } else if (current.is_day && current.weather_code < 50 && (current.cloud_cover || 0) < 60 && daily.uv_index_max && daily.uv_index_max[0] >= 7) {
     highlightBadge = `<div class="weather-alert-badge alert-uv"><span class="badge-dot"></span> High UV Today</div>`;
   } else if (current.wind_speed_10m > 35) {
     highlightBadge = `<div class="weather-alert-badge alert-wind"><span class="badge-dot"></span> Gusty Winds</div>`;
+  } else if (current.station) {
+    highlightBadge = `<div class="weather-alert-badge alert-verified"><span class="badge-dot"></span> Ground Station Verified</div>`;
   } else {
-    highlightBadge = `<div class="weather-alert-badge alert-optimal"><span class="badge-dot"></span> Ideal Conditions</div>`;
+    highlightBadge = `<div class="weather-alert-badge alert-optimal"><span class="badge-dot"></span> Pleasant Conditions</div>`;
   }
 
   // Favorites popup items HTML
@@ -78,6 +84,10 @@ export function renderCurrentWeather(
       .join('');
   }
 
+  const stationTagHtml = current.station
+    ? `<span class="dot-separator">•</span><span class="station-tag" title="Assimilated from METAR ground station ${current.station.icao} (${current.station.distKm} km away)">📍 METAR: ${current.station.icao}</span>`
+    : '';
+
   container.innerHTML = `
     <div class="glass-card hero-card">
       <div class="hero-header">
@@ -89,6 +99,7 @@ export function renderCurrentWeather(
             <span class="country-name">${city.admin1 ? city.admin1 + ', ' : ''}${city.country}</span>
             <span class="dot-separator">•</span>
             <span class="local-time" id="hero-local-time">${formattedDate}, ${localTime}</span>
+            ${stationTagHtml}
           </div>
         </div>
 

@@ -18,8 +18,14 @@ export function renderHourlyForecast(container, { weather, unit, is24h }) {
   let startIndex = 0;
   if (hourly.time && hourly.time.length > 0) {
     const now = new Date(currentTimeISO).getTime();
-    startIndex = hourly.time.findIndex((t) => new Date(t).getTime() >= now);
-    if (startIndex === -1) startIndex = 0;
+    let minDiff = Infinity;
+    for (let i = 0; i < hourly.time.length; i++) {
+      const diff = Math.abs(new Date(hourly.time[i]).getTime() - now);
+      if (diff < minDiff) {
+        minDiff = diff;
+        startIndex = i;
+      }
+    }
   }
 
   // Slice next 24 hours

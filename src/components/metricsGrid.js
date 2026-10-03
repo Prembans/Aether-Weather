@@ -21,9 +21,32 @@ export function renderMetricsGrid(container, { weather, airQuality, unit, is24h 
   const current = weather.current;
   const daily = weather.daily || {};
 
-  // 1. UV Index
-  const todayUV = daily.uv_index_max && daily.uv_index_max.length > 0 ? daily.uv_index_max[0] : 0;
-  const uvInfo = getUVInfo(todayUV);
+  // 1. Current Context-Aware UV Index
+  let closestIdx = 0;
+  if (weather.hourly && weather.hourly.time) {
+    const nowTime = new Date(current.time).getTime();
+    let minDiff = Infinity;
+    for (let i = 0; i < weather.hourly.time.length; i++) {
+      const diff = Math.abs(new Date(weather.hourly.time[i]).getTime() - nowTime);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIdx = i;
+      }
+    }
+  }
+
+  const todayMaxUV = daily.uv_index_max && daily.uv_index_max.length > 0 ? daily.uv_index_max[0] : 0;
+  let currentUV = 0;
+  if (current.is_day) {
+    currentUV = weather.hourly && weather.hourly.uv_index ? (weather.hourly.uv_index[closestIdx] || 0) : todayMaxUV;
+    // Suppress UV under heavy overcast, mist, or rain
+    if (current.weather_code >= 50 || current.weather_code === 3 || current.weather_code === 10) {
+      currentUV = Math.min(currentUV, 1.2);
+    } else if (current.cloud_cover && current.cloud_cover > 70) {
+      currentUV = Math.min(currentUV, 2.8);
+    }
+  }
+  const uvInfo = getUVInfo(currentUV);
 
   // 2. Wind
   const windSpeedDisplay = formatWindSpeed(current.wind_speed_10m, unit);
@@ -121,7 +144,7 @@ export function renderMetricsGrid(container, { weather, airQuality, unit, is24h 
               />
             </svg>
             <div class="uv-score-center">
-              <span class="uv-val">${todayUV.toFixed(1)}</span>
+              <span class="uv-val">${currentUV.toFixed(1)}</span>
             </div>
           </div>
           <div class="uv-info-column">
@@ -129,6 +152,7 @@ export function renderMetricsGrid(container, { weather, airQuality, unit, is24h 
               ${uvInfo.level}
             </span>
             <p class="uv-desc">${uvInfo.description}</p>
+            <span class="uv-max-sub" style="font-size: 0.75rem; color: var(--text-muted); opacity: 0.85;">Daily Peak: ${todayMaxUV.toFixed(0)} UV</span>
           </div>
         </div>
       </div>
