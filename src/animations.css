@@ -1,0 +1,208 @@
+/**
+ * Micro-animations and Keyframe Transitions for Weather Dynamics
+ */
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinCounterClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes floatCloud {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(-3px) translateX(2px);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 8px rgba(253, 224, 71, 0.5));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 16px rgba(253, 224, 71, 0.85));
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes rainFall {
+  0% {
+    transform: translateY(-8px) scaleY(0.8);
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(14px) scaleY(1.1);
+    opacity: 0.2;
+  }
+}
+
+@keyframes lightningFlash {
+  0%, 88%, 94%, 100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  89%, 92% {
+    opacity: 1;
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 14px #FDE047);
+  }
+}
+
+@keyframes radarPing {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes fogSway {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Applying animation classes */
+.sun-rays {
+  transform-origin: 32px 32px;
+  animation: spinSlow 30s linear infinite;
+}
+
+.sun-core {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+.cloud-anim {
+  animation: floatCloud 5s ease-in-out infinite;
+}
+
+.star-twinkle.s1 {
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+.star-twinkle.s2 {
+  animation: twinkle 2.6s ease-in-out 0.8s infinite;
+}
+.star-twinkle.s3 {
+  animation: twinkle 3.8s ease-in-out 1.5s infinite;
+}
+
+.raindrop.r1 {
+  animation: rainFall 1.1s cubic-bezier(0.55, 0.085, 0.68, 0.53) infinite;
+}
+.raindrop.r2 {
+  animation: rainFall 0.95s cubic-bezier(0.55, 0.085, 0.68, 0.53) 0.3s infinite;
+}
+.raindrop.r3 {
+  animation: rainFall 1.15s cubic-bezier(0.55, 0.085, 0.68, 0.53) 0.6s infinite;
+}
+
+.raindrop-fast.r1 {
+  animation: rainFall 0.65s cubic-bezier(0.55, 0.085, 0.68, 0.53) infinite;
+}
+.raindrop-fast.r2 {
+  animation: rainFall 0.7s cubic-bezier(0.55, 0.085, 0.68, 0.53) 0.15s infinite;
+}
+.raindrop-fast.r3 {
+  animation: rainFall 0.6s cubic-bezier(0.55, 0.085, 0.68, 0.53) 0.3s infinite;
+}
+.raindrop-fast.r4 {
+  animation: rainFall 0.75s cubic-bezier(0.55, 0.085, 0.68, 0.53) 0.45s infinite;
+}
+
+.lightning-bolt {
+  animation: lightningFlash 4.5s infinite;
+}
+
+.snowflake-rot.sf1 {
+  transform-origin: 22px 49px;
+  animation: spinClockwise 12s linear infinite;
+}
+.snowflake-rot.sf2 {
+  transform-origin: 38px 51px;
+  animation: spinCounterClockwise 14s linear infinite;
+}
+
+.fog-line.f1 {
+  animation: fogSway 6s ease-in-out infinite;
+}
+.fog-line.f2 {
+  animation: fogSway 8s ease-in-out 1s infinite;
+}
+.fog-line.f3 {
+  animation: fogSway 7s ease-in-out 0.5s infinite;
+}
+.fog-line.f4 {
+  animation: fogSway 9s ease-in-out 1.5s infinite;
+}
+
+.glass-card {
+  animation: cardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+/* Stagger entrance for visual polish */
+.hero-card { animation-delay: 0.05s; }
+.hourly-section-card { animation-delay: 0.12s; }
+.daily-forecast-card { animation-delay: 0.18s; }
+.metrics-grid .metric-card:nth-child(1) { animation-delay: 0.22s; }
+.metrics-grid .metric-card:nth-child(2) { animation-delay: 0.26s; }
+.metrics-grid .metric-card:nth-child(3) { animation-delay: 0.30s; }
+.metrics-grid .metric-card:nth-child(4) { animation-delay: 0.34s; }
+.metrics-grid .metric-card:nth-child(5) { animation-delay: 0.38s; }
+.metrics-grid .metric-card:nth-child(6) { animation-delay: 0.42s; }
+.metrics-grid .metric-card:nth-child(7) { animation-delay: 0.46s; }
+.weather-map-card { animation-delay: 0.50s; }

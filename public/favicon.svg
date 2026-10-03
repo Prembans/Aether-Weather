@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <radialGradient id="sun" cx="24" cy="24" r="14" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#EA580C" />
+    </radialGradient>
+    <linearGradient id="cloud" x1="18" y1="28" x2="52" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#94A3B8" />
+    </linearGradient>
+  </defs>
+  <circle cx="26" cy="26" r="12" fill="url(#sun)" />
+  <path d="M48 46H20C15.6 46 12 42.4 12 38C12 34 15 30.7 18.9 30.1C20.6 24.3 26 20 32.5 20C39.8 20 45.8 25.4 46.8 32.5C49.8 33.2 52 35.8 52 39C52 42.9 48.9 46 48 46Z" fill="url(#cloud)" />
+</svg>

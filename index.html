@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Aether Weather - Next-Generation Atmospheric Weather Dashboard with Real-Time Global Forecasts, Living Dynamics, and Air Quality Insights." />
+    <meta name="theme-color" content="#0f172a" />
+    <title>Aether Weather • Living Atmospheric Forecasts</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body class="theme-clear-day">
+    <!-- Living Atmospheric Particle Background Canvas -->
+    <canvas id="atmosphere-canvas"></canvas>
+
+    <div class="app-container">
+      <!-- App Header with Unified Search & Controls -->
+      <header class="app-header">
+        <div class="brand-group">
+          <div class="brand-icon-wrapper">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+            </svg>
+          </div>
+          <span class="brand-text">Aether</span>
+        </div>
+
+        <!-- Integrated Search Bar -->
+        <div class="header-search-wrapper" id="search-bar-container"></div>
+
+        <div class="header-actions">
+          <!-- Metric / Imperial Unit Toggle -->
+          <div class="unit-toggle-pill" role="group" aria-label="Temperature unit selection">
+            <button class="unit-btn active" id="btn-unit-c" data-unit="metric">°C</button>
+            <button class="unit-btn" id="btn-unit-f" data-unit="imperial">°F</button>
+          </div>
+
+          <!-- Live Refresh Button -->
+          <button class="btn-refresh" id="btn-refresh-weather" aria-label="Refresh live weather" title="Refresh weather data">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+              <path d="M21 3v5h-5"></path>
+              <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+              <path d="M8 16H3v5"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Favorites / Pinned Cities Bar -->
+      <section class="favorites-section">
+        <div id="favorites-container"></div>
+      </section>
+
+      <!-- Main Dashboard Grid -->
+      <main class="dashboard-layout">
+        <!-- Main Column: Hero, Hourly, Metrics Grid -->
+        <div class="main-column">
+          <!-- Current Weather Hero Card -->
+          <section id="current-weather-container" aria-label="Current conditions"></section>
+
+          <!-- 24-Hour Hourly Forecast & Chart -->
+          <section id="hourly-forecast-container" aria-label="Hourly forecast"></section>
+
+          <!-- Weather Metrics Grid (UV, Wind Compass, Sun Arc, AQI, Humidity, Pressure, Visibility) -->
+          <section id="metrics-grid-container" aria-label="Weather metrics"></section>
+        </div>
+
+        <!-- Side Column: 7-Day Outlook & Radar Map -->
+        <aside class="side-column">
+          <!-- 7-Day Extended Forecast -->
+          <section id="daily-forecast-container" aria-label="7-Day forecast"></section>
+
+          <!-- Weather Radar Map -->
+          <section id="weather-map-container" aria-label="Precipitation radar map"></section>
+        </aside>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
