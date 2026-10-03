@@ -111,13 +111,16 @@ body.theme-fog {
 
 html, body {
   width: 100%;
+  max-width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   font-family: var(--font-body);
   background: var(--bg-gradient);
   background-attachment: fixed;
   color: var(--text-main);
   line-height: 1.5;
   overflow-x: hidden;
+  position: relative;
   transition: background 0.8s ease-in-out;
 }
 
@@ -136,12 +139,15 @@ html, body {
 .app-container {
   position: relative;
   z-index: 1;
+  width: 100%;
   max-width: 1220px;
+  min-width: 0;
   margin: 0 auto;
-  padding: 12px 18px 24px;
+  padding: 12px max(14px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-x: hidden;
 }
 
 /* ==========================================================================
@@ -527,18 +533,24 @@ html, body {
   grid-template-columns: minmax(0, 1fr) 340px;
   gap: 14px;
   align-items: start;
+  width: 100%;
+  min-width: 0;
 }
 
 .main-column {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  width: 100%;
+  min-width: 0;
 }
 
 .side-column {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  width: 100%;
+  min-width: 0;
 }
 
 /* Section Headers */
@@ -1867,43 +1879,601 @@ html, body {
 }
 
 /* ==========================================================================
-   Responsive Adaptations
+   Responsive Adaptations & All-Device Layout System
    ========================================================================== */
 
+/* --- Tablets & Medium Screens (641px - 1080px) --- */
 @media (max-width: 1080px) {
   .dashboard-layout {
     grid-template-columns: 1fr;
   }
+
   .side-column {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .sun-card {
+    grid-column: span 3;
   }
 }
 
+/* --- Small Tablets & Large Mobiles (641px - 768px) --- */
+@media (max-width: 768px) {
+  .side-column {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sun-card {
+    grid-column: span 2;
+  }
+
+  .app-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .brand-group {
+    order: 1;
+  }
+
+  .header-actions {
+    order: 2;
+    gap: 8px;
+  }
+
+  .header-search-wrapper {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+}
+
+/* --- Standard Mobile Phones (<= 640px) --- */
 @media (max-width: 640px) {
   .app-container {
-    padding: 16px 14px 40px;
-    gap: 18px;
+    padding: 10px 12px 28px;
+    gap: 10px;
+  }
+
+  /* Header Mobile Organization */
+  .app-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .brand-group {
+    order: 1;
+    gap: 8px;
+  }
+
+  .brand-icon-wrapper {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+  }
+
+  .brand-icon-wrapper svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .brand-text {
+    font-size: 1.2rem;
+  }
+
+  .header-actions {
+    order: 2;
+    gap: 8px;
+  }
+
+  .unit-toggle-pill {
+    padding: 2px;
+  }
+
+  .unit-btn {
+    padding: 4px 10px;
+    font-size: 0.78rem;
+  }
+
+  .btn-refresh {
+    width: 32px;
+    height: 32px;
+  }
+
+  .btn-refresh svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .header-search-wrapper {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+    margin-top: 2px;
+  }
+
+  .search-input-wrapper {
+    padding: 7px 12px;
+    border-radius: var(--radius-pill);
+  }
+
+  .search-icon {
+    margin-right: 8px;
+  }
+
+  .city-search-input {
+    font-size: 0.92rem;
+  }
+
+  .search-dropdown {
+    max-height: 280px;
+    border-radius: 14px;
+  }
+
+  .search-item {
+    padding: 10px 14px;
+  }
+
+  .item-city {
+    font-size: 0.92rem;
+  }
+
+  /* Favorites Bar Mobile */
+  .favorites-section {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .favorites-bar-scroll {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding: 2px 0 6px;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .favorites-label {
+    font-size: 0.72rem;
+  }
+
+  .fav-pill {
+    padding: 4px 10px;
+    font-size: 0.78rem;
+    gap: 6px;
+  }
+
+  /* Cards General */
+  .glass-card {
+    padding: 14px 14px;
+    border-radius: 16px;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* Hero Current Weather Card Mobile */
+  .hero-card {
+    padding: 14px 14px;
+    gap: 12px;
+  }
+
+  .hero-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .location-group {
+    width: 100%;
   }
 
   .city-name {
-    font-size: 1.8rem;
+    font-size: 1.65rem;
+    line-height: 1.15;
+  }
+
+  .location-details {
+    font-size: 0.8rem;
+    gap: 4px 6px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+  }
+
+  .hero-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .weather-alert-badge {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    letter-spacing: 0.01em;
+  }
+
+  .split-fav-btn-wrapper {
+    flex-shrink: 0;
+  }
+
+  .btn-split-main {
+    padding: 5px 10px 5px 8px;
+    font-size: 0.76rem;
+  }
+
+  .btn-split-chevron {
+    padding: 6px 9px;
+  }
+
+  .fav-manage-popup {
+    max-width: calc(100vw - 32px);
+    width: 270px;
+    right: 0;
+  }
+
+  .hero-body {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .temp-section {
+    gap: 4px;
   }
 
   .temp-number {
-    font-size: 4.2rem;
+    font-size: clamp(2.6rem, 10vw, 3.4rem);
+    line-height: 1;
+  }
+
+  .feels-like-pill {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+  }
+
+  .condition-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: right;
+    justify-content: flex-end;
+  }
+
+  .hero-icon-wrapper svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .condition-text-group {
+    gap: 2px;
+  }
+
+  .condition-title {
+    font-size: 1.1rem;
+    line-height: 1.2;
+  }
+
+  .condition-desc {
+    font-size: 0.76rem;
+    max-width: 140px;
+    line-height: 1.25;
+  }
+
+  .hero-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding-top: 10px;
+  }
+
+  .hi-lo-pill {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    gap: 6px;
+  }
+
+  .mini-range-bar {
+    flex: 1;
+    max-width: 100px;
+    margin: 0 4px;
+  }
+
+  .quick-status-items {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    gap: 8px;
+  }
+
+  /* Hourly Forecast Section Mobile */
+  .hourly-section-card {
+    padding: 14px 14px;
+    gap: 10px;
+  }
+
+  .section-header-row {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-size: 0.98rem;
+  }
+
+  .view-toggle-btn {
+    padding: 4px 10px;
+    font-size: 0.74rem;
+  }
+
+  .hourly-carousel-wrapper {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .hourly-card {
+    min-width: 58px;
+    padding: 6px 4px;
+    border-radius: 12px;
+  }
+
+  .hour-time {
+    font-size: 0.7rem;
+  }
+
+  .hour-temp {
+    font-size: 0.92rem;
+  }
+
+  .precip-pill {
+    font-size: 0.68rem;
+  }
+
+  /* Metrics Grid (2-Column Mobile Layout) */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .metric-card {
+    padding: 10px 10px;
+    min-height: 105px;
+    border-radius: 14px;
+    min-width: 0;
+  }
+
+  .metric-title {
+    font-size: 0.7rem;
+  }
+
+  .sun-card {
+    grid-column: span 2;
+  }
+
+  .uv-metric-body,
+  .wind-metric-body {
+    gap: 8px;
+  }
+
+  .uv-ring-wrapper {
+    width: 54px;
+    height: 54px;
+  }
+
+  .uv-ring-wrapper svg {
+    width: 54px;
+    height: 54px;
+  }
+
+  .uv-val {
+    font-size: 1rem;
+  }
+
+  .uv-level-badge {
+    font-size: 0.72rem;
+    padding: 2px 7px;
+  }
+
+  .uv-desc {
+    font-size: 0.72rem;
+  }
+
+  .compass-dial {
+    width: 52px;
+    height: 52px;
+  }
+
+  .wind-num {
+    font-size: 1.15rem;
+  }
+
+  .wind-dir-tag {
+    font-size: 0.75rem;
+  }
+
+  .wind-gust-sub {
+    font-size: 0.72rem;
+  }
+
+  .sun-times-row {
+    font-size: 0.78rem;
+  }
+
+  .sun-phase-pill {
+    font-size: 0.66rem;
+    padding: 2px 6px;
+  }
+
+  .big-metric-num {
+    font-size: 1.6rem;
+  }
+
+  /* 7-Day Forecast Mobile */
+  .daily-forecast-card {
+    padding: 14px 14px;
+    gap: 8px;
+  }
+
+  .daily-row {
+    grid-template-columns: 52px 42px minmax(0, 1fr);
+    padding: 6px 8px;
+    gap: 4px;
+    border-radius: 8px;
+  }
+
+  .day-icon-group svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .day-name {
+    font-size: 0.82rem;
+  }
+
+  .daily-precip-badge {
+    font-size: 0.66rem;
+    width: 24px;
+  }
+
+  .temp-range-container {
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .range-min-temp,
+  .range-max-temp {
+    font-size: 0.78rem;
+    width: 20px;
+  }
+
+  /* Radar Map Mobile */
+  .weather-map-card {
+    padding: 14px 14px;
+    gap: 8px;
+  }
+
+  .map-header-clean {
+    margin-bottom: 8px;
+  }
+
+  .radar-live-badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+
+  .map-container-frame {
+    height: 230px;
+    border-radius: 12px;
+  }
+
+  .map-float-layer-bar {
+    top: 8px;
+    left: 8px;
+    padding: 2px;
+    gap: 1px;
+  }
+
+  .layer-pill-btn {
+    font-size: 0.6rem;
+    padding: 2px 5px;
+  }
+
+  .map-float-recenter-btn {
+    bottom: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .map-float-legend {
+    bottom: 8px;
+    left: 8px;
+    padding: 2px 6px;
+    font-size: 0.58rem;
+    gap: 4px;
+  }
+
+  .legend-bar {
+    width: 36px;
+  }
+
+  /* Toasts on Mobile */
+  .toast-container {
+    bottom: 14px;
+    left: 14px;
+    right: 14px;
+    align-items: center;
+  }
+
+  .toast-pill {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.82rem;
+    padding: 8px 14px;
+  }
+}
+
+/* --- Ultra-Narrow / Small Foldable Devices (<= 350px) --- */
+@media (max-width: 350px) {
+  .app-container {
+    padding: 8px 8px 24px;
+    gap: 8px;
   }
 
   .metrics-grid {
     grid-template-columns: 1fr;
   }
 
+  .sun-card {
+    grid-column: span 1;
+  }
+
   .hero-body {
     flex-direction: column;
     align-items: flex-start;
+    gap: 8px;
+  }
+
+  .condition-section {
+    text-align: left;
+    justify-content: flex-start;
   }
 
   .daily-row {
-    grid-template-columns: 65px 60px 1fr;
+    grid-template-columns: 46px 38px minmax(0, 1fr);
+    font-size: 0.78rem;
   }
 }

@@ -15,7 +15,7 @@ export function setupSearchBar(container, { onSelectCity, onLocateMe, showToast 
           type="text"
           id="city-search-input"
           class="city-search-input"
-          placeholder="Search global cities (e.g. Paris, Tokyo, New York)..."
+          placeholder="Search city, state, or country..."
           autocomplete="off"
           spellcheck="false"
         />
