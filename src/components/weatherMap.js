@@ -84,11 +84,12 @@ export function renderWeatherMap(container, { city, weather, unit }) {
             </svg>
           </button>
 
-          <!-- Floating Rain Legend (Bottom Left) -->
-          <div class="map-float-legend">
-            <span class="legend-label">Precip</span>
-            <div class="legend-bar" title="Light to Heavy Precipitation"></div>
-            <span class="legend-scale">50mm</span>
+          <!-- Floating Rain Radar Legend (Bottom Left) -->
+          <div class="map-float-legend" title="Rain radar intensity: Light to heavy rainfall">
+            <span class="legend-label">Rain:</span>
+            <span class="legend-scale">Light</span>
+            <div class="legend-bar"></div>
+            <span class="legend-scale">Heavy</span>
           </div>
         </div>
       </div>
@@ -258,20 +259,29 @@ function updateCityMarker(lat, lon, city, weather, unit) {
   const meta = getWeatherMeta(currentCode, isDay);
 
   const customIconHtml = `
-    <div class="map-custom-marker">
-      <div class="marker-pulse-glow"></div>
-      <div class="marker-pill">
-        <span class="marker-temp">${currentTemp}</span>
-        <span class="marker-city">${city.name}</span>
+    <div class="map-location-pin" title="${city.name} • ${currentTemp}">
+      <div class="pin-radar-ring"></div>
+      <div class="pin-marker-body">
+        <svg width="24" height="30" viewBox="0 0 24 30" fill="none">
+          <path d="M12 0C5.37 0 0 5.37 0 12C0 21 12 30 12 30S24 21 24 12C24 5.37 18.63 0 12 0Z" fill="url(#pinGrad)" filter="drop-shadow(0 3px 6px rgba(0,0,0,0.55))" />
+          <circle cx="12" cy="11" r="4.5" fill="#ffffff" />
+          <defs>
+            <linearGradient id="pinGrad" x1="0" y1="0" x2="0" y2="30" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#38BDF8" />
+              <stop offset="100%" stop-color="#0284C7" />
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
     </div>
   `;
 
   const customIcon = L.divIcon({
     html: customIconHtml,
-    className: 'leaflet-div-marker-wrapper',
-    iconSize: [110, 42],
-    iconAnchor: [55, 21],
+    className: 'leaflet-pin-wrapper',
+    iconSize: [24, 30],
+    iconAnchor: [12, 30],
+    popupAnchor: [0, -28],
   });
 
   currentMarker = L.marker([lat, lon], { icon: customIcon }).addTo(mapInstance);

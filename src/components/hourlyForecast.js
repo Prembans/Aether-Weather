@@ -27,15 +27,18 @@ export function renderHourlyForecast(container, { weather, unit, is24h }) {
   const count = Math.min(24, hourly.time.length - startIndex);
   for (let i = 0; i < count; i++) {
     const idx = startIndex + i;
+    const isFirst = i === 0;
     hours.push({
       time: hourly.time[idx],
-      isFirst: i === 0,
-      temp: hourly.temperature_2m[idx],
-      apparentTemp: hourly.apparent_temperature ? hourly.apparent_temperature[idx] : hourly.temperature_2m[idx],
-      weatherCode: hourly.weather_code[idx],
+      isFirst,
+      temp: isFirst && weather.current ? weather.current.temperature_2m : hourly.temperature_2m[idx],
+      apparentTemp: isFirst && weather.current
+        ? weather.current.apparent_temperature
+        : (hourly.apparent_temperature ? hourly.apparent_temperature[idx] : hourly.temperature_2m[idx]),
+      weatherCode: isFirst && weather.current ? weather.current.weather_code : hourly.weather_code[idx],
       precipProb: hourly.precipitation_probability ? hourly.precipitation_probability[idx] : 0,
-      isDay: hourly.is_day ? hourly.is_day[idx] : 1,
-      windSpeed: hourly.wind_speed_10m ? hourly.wind_speed_10m[idx] : 0,
+      isDay: isFirst && weather.current ? weather.current.is_day : (hourly.is_day ? hourly.is_day[idx] : 1),
+      windSpeed: isFirst && weather.current ? weather.current.wind_speed_10m : (hourly.wind_speed_10m ? hourly.wind_speed_10m[idx] : 0),
     });
   }
 

@@ -94,11 +94,72 @@ export async function fetchWeatherData(lat, lon) {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Weather API HTTP error ${res.status}`);
     const data = await res.json();
-    return data;
+    return reconcileWeatherData(data);
   } catch (err) {
     console.error('Weather forecast fetch error:', err);
     throw err;
   }
+}
+
+/**
+ * Reconcile & harmonize instantaneous current observations with hourly model forecast
+ * Prevents instantaneous NWP 15-minute interpolation lag (e.g. reporting "Clear sky"
+ * during an active rain hour with precipitation probability or radar echoes).
+ */
+function reconcileWeatherData(data) {
+  if (!data || !data.current || !data.hourly) return data;
+
+  const current = data.current;
+  const hourly = data.hourly;
+
+  if (hourly.time && hourly.time.length > 0) {
+    const nowTime = new Date(current.time).getTime();
+    let closestIdx = 0;
+    let minDiff = Infinity;
+    for (let i = 0; i < hourly.time.length; i++) {
+      const diff = Math.abs(new Date(hourly.time[i]).getTime() - nowTime);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIdx = i;
+      }
+    }
+
+    const hourlyCode = hourly.weather_code ? hourly.weather_code[closestIdx] : null;
+    const hourlyPrecip = hourly.precipitation ? hourly.precipitation[closestIdx] : 0;
+    const hourlyProb = hourly.precipitation_probability ? hourly.precipitation_probability[closestIdx] : 0;
+    const currentPrecip = (current.precipitation || 0) + (current.rain || 0) + (current.showers || 0);
+
+    // 1. If active precipitation is occurring (> 0 mm), but code is clear (0, 1, 2)
+    if (currentPrecip > 0 && current.weather_code < 50) {
+      if (hourlyCode && hourlyCode >= 50) {
+        current.weather_code = hourlyCode;
+      } else if (currentPrecip > 4) {
+        current.weather_code = 65; // Heavy rain
+      } else if (currentPrecip > 1) {
+        current.weather_code = 63; // Moderate rain
+      } else {
+        current.weather_code = 61; // Slight rain
+      }
+    }
+    // 2. If the current hour in hourly forecast indicates rain (code >= 50 or precipitation > 0 or rain prob >= 25%)
+    // and instantaneous current code reports "Clear sky" (0) or "Mainly clear" (1)
+    else if (hourlyCode && hourlyCode >= 50 && (current.weather_code === 0 || current.weather_code === 1)) {
+      if (hourlyPrecip > 0 || hourlyProb >= 25 || (current.cloud_cover && current.cloud_cover > 35)) {
+        current.weather_code = hourlyCode;
+        if (current.precipitation === 0 && hourlyPrecip > 0) {
+          current.precipitation = hourlyPrecip;
+        }
+      }
+    }
+    // 3. If daily[0] indicates rain today and current hour has rain probability or overcast clouds
+    else if (data.daily && data.daily.weather_code && data.daily.weather_code[0] >= 50 && current.weather_code === 0) {
+      if (hourlyProb >= 35 || (current.cloud_cover && current.cloud_cover > 50)) {
+        current.weather_code = hourlyCode && hourlyCode >= 50 ? hourlyCode : data.daily.weather_code[0];
+      }
+    }
+  }
+
+  return data;
 }
 
 /**
